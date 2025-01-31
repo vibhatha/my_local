@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mylocal"
+version = "0.1.0"
+description = "A Python library for mylocal"
+authors = [
+    { name="Vibhatha Abeykoon", email="vibhatha@gmail.com" }
+]
+dependencies = [
+    "neo4j",
+    "pandas",
+    "pyarrow"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "flake8",
+    "pre-commit",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0"
+]
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.flake8]
+max-line-length = 120 
