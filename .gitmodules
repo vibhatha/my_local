@@ -1,0 +1,3 @@
+[submodule "external/gig-data"]
+	path = external/gig-data
+	url = https://github.com/vibhatha/gig-data.git
