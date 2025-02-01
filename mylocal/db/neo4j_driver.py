@@ -42,3 +42,32 @@ class Neo4jDriver:
                     session.execute_write(
                         self.insert_relationship, node_label, parent_label, "GOVERNED_BY", row["id"], row[parent_key]
                     )
+
+    def execute_query(self, query, parameters=None):
+        """
+        Execute a read query and return the results.
+
+        Args:
+            query (str): The Cypher query to execute
+            parameters (dict, optional): Query parameters. Defaults to None.
+
+        Returns:
+            list: List of records from the query result
+        """
+        with self._driver.session() as session:
+            result = session.run(query, parameters or {})
+            return [record for record in result]
+
+    def execute_read_query(self, query, parameters=None):
+        """
+        Execute a read-only query in a read transaction.
+
+        Args:
+            query (str): The Cypher query to execute
+            parameters (dict, optional): Query parameters. Defaults to None.
+
+        Returns:
+            list: List of records from the query result
+        """
+        with self._driver.session() as session:
+            return session.execute_read(lambda tx: [record for record in tx.run(query, parameters or {})])

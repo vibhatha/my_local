@@ -28,11 +28,35 @@ A Python library for mylocal.
 
 ## Development Setup
 
+### Submodules
+
+Clone the repo but make sure to update the submodules as well:
+
+```bash
+git submodule update --init --recursive
+```
+
+#### Update Submodules
+
+To update the gig-data submodule:
+
+```bash
+cd external/gig-data
+git pull origin master
+cd ../..
+git add external/gig-data
+git commit -m "Update gig-data submodule"
+```
+
+## Install Library for Development
+
 To install development dependencies for code formatting and linting, run:
 
 ```bash
 pip install -e ".[dev]"
 ```
+
+## Format and Lint Code
 
 To format and lint the code, use the provided script:
 
@@ -40,7 +64,9 @@ To format and lint the code, use the provided script:
 ./format_code.sh
 ```
 
-## Querying the Database
+## Example Usage
+
+### Querying the Database
 
 To query the database, run:
 
@@ -92,3 +118,17 @@ a
 r
 a
 ```
+
+## Running Tests
+
+To run the tests, run:
+
+```bash
+pytest tests/
+```
+
+## Running Tests with Coverage
+
+To run the tests with coverage, run:
+
+TBD
