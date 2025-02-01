@@ -2,6 +2,15 @@ class ConnectorManager:
     def __init__(self):
         self.connectors = {}
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        # Close all registered connectors
+        for connector in self.connectors.values():
+            if hasattr(connector, "close"):
+                connector.close()
+
     def register_connector(self, name, connector):
         self.connectors[name] = connector
 

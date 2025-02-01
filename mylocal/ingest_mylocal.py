@@ -1,6 +1,8 @@
+import os
+
 from mylocal.db.connect import ConnectorManager
 from mylocal.db.neo4j_driver import Neo4jDriver
-import os
+
 
 def ingest_data():
     # Get Neo4j connection details from environment variables
@@ -43,10 +45,16 @@ def ingest_data():
     with ConnectorManager() as manager:
         with Neo4jDriver(uri, username, password) as driver:
             manager.register_connector("neo4j", driver)
-            
+
             # Process all files
             for file_key, node_label, parent_key, parent_label in processing_steps:
                 driver.process_file(file_paths[file_key], node_label, parent_key, parent_label)
 
+
 if __name__ == "__main__":
-    ingest_data() 
+    print("Ingesting data...")
+    disabled = True
+    if not disabled:
+        ingest_data()
+    else:
+        print("Ingestion disabled")
