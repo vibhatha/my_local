@@ -11,7 +11,7 @@ def main():
     args = parser.parse_args()
 
     # Initialize the Neo4jQueryProcessor
-    processor = Neo4jQueryProcessor()
+    processor = Neo4jQueryProcessor(model_name="openai")
 
     # Run the query using the processor
     try:
