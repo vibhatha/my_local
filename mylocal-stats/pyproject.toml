@@ -1,0 +1,66 @@
+[project]
+name = "mylocalstats"
+version = "0.1.0"
+description = "MyLocal Stats Service"
+authors = [
+    {name = "Vibhatha Abeykoon", email = "vibhatha@gmail.com"},
+]
+requires-python = ">=3.9"
+dependencies = [
+    "django>=4.0.0",
+    "pandas>=2.2.0",
+    "psycopg2-binary>=2.9.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.2.0",
+    "isort>=5.13.2",
+    "flake8>=7.0.0",
+    "pre-commit>=3.6.0",
+    "autopep8>=2.0.0",
+    "autoflake>=2.2.0",
+    "yapf>=0.40.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["mylocalstats*", "mylocalstats.population_stats*"]
+exclude = ["tests*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]
+include = "\\.pyi?$"
+extend-exclude = """
+/population_stats/migrations/
+/mylocalstats/settings.py
+"""
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+skip = ["migrations", "settings.py"]
+src_paths = ["touristats", "traveller_service"]
+
+[tool.autoflake]
+in-place = true
+remove-all-unused-imports = true
+ignore-init-module-imports = true
+remove-unused-variables = true
+recursive = true
+
+[tool.yapf]
+based_on_style = "pep8"
+column_limit = 100
+split_before_logical_operator = true
+dedent_closing_brackets = true
+split_before_first_argument = true
