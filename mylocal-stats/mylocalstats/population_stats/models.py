@@ -4,6 +4,10 @@ class Region(models.Model):
     """Base model for regions/entities"""
     entity_id = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=255)
+    type = models.CharField(max_length=255, default="PD")
+    
+    class Meta:
+        app_label = 'population_stats'
     
     def __str__(self):
         return self.name
@@ -15,6 +19,7 @@ class TotalPopulation(models.Model):
     year = models.IntegerField(default=2012)
     
     class Meta:
+        app_label = 'population_stats'
         verbose_name_plural = "Total Population"
     
     def __str__(self):
