@@ -18,6 +18,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from mylocalstats.population_stats import views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('regions/type/<str:type>/', views.get_regions_by_type, name='regions-by-type'),
+    path('region/<int:region_id>/', views.get_region_by_id, name='region-by-id'),
+    path('population/region-type/<str:type>/', views.get_population_by_region_type, name='population-by-region-type'),
+    path('population/region/<int:region_id>/', views.get_population_by_region_id, name='population-by-region-id'),
 ]
