@@ -22,8 +22,10 @@ from mylocalstats.population_stats import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('regions/type/<str:type>/', views.get_regions_by_type, name='regions-by-type'),
-    path('region/<int:region_id>/', views.get_region_by_id, name='region-by-id'),
-    path('population/region-type/<str:type>/', views.get_population_by_region_type, name='population-by-region-type'),
-    path('population/region/<int:region_id>/', views.get_population_by_region_id, name='population-by-region-id'),
+    path('api/v1/regions/type/<str:region_type>/', views.get_regions_by_type, name='regions-by-type'),
+    path('api/v1/region/<str:region_id>/', views.get_region_by_id, name='region-by-id'),
+    path('api/v1/population/region/type/<str:region_type>/', views.get_population_by_region_type, name='population-by-region-type'),
+    path('api/v1/population/region/id/<str:region_id>/', views.get_population_by_region_id, name='population-by-region-id'),
+    path('api/v1/age-distribution/region/type/<str:region_type>/', views.get_age_distribution_by_region_type, name='age-distribution-by-region-type'),
+    path('api/v1/age-distribution/region/id/<str:region_id>/', views.get_age_distribution_by_region_id, name='age-distribution-by-region-id'),
 ]
