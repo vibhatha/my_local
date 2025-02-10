@@ -28,4 +28,6 @@ urlpatterns = [
     path('api/v1/population/region/id/<str:region_id>/', views.get_population_by_region_id, name='population-by-region-id'),
     path('api/v1/age-distribution/region/type/<str:region_type>/', views.get_age_distribution_by_region_type, name='age-distribution-by-region-type'),
     path('api/v1/age-distribution/region/id/<str:region_id>/', views.get_age_distribution_by_region_id, name='age-distribution-by-region-id'),
+    path('api/v1/ethnicity-distribution/region/type/<str:region_type>/', views.get_ethnicity_distribution_by_region_type, name='ethnicity-distribution-by-region-type'),
+    path('api/v1/ethnicity-distribution/region/id/<str:region_id>/', views.get_ethnicity_distribution_by_region_id, name='ethnicity-distribution-by-region-id'),
 ]
