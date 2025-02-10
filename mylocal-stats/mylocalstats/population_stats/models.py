@@ -48,12 +48,15 @@ class EthnicityDistribution(models.Model):
     """Population by ethnicity"""
     region = models.OneToOneField(Region, on_delete=models.CASCADE, primary_key=True)
     total_population = models.IntegerField()
-    european = models.IntegerField()
-    maori = models.IntegerField()
-    pacific_peoples = models.IntegerField()
-    asian = models.IntegerField()
-    middle_eastern_latin_american_african = models.IntegerField()
-    other_ethnicity = models.IntegerField()
+    sinhalese = models.IntegerField()
+    sl_tamil = models.IntegerField()
+    ind_tamil = models.IntegerField()
+    sl_moor = models.IntegerField()
+    burgher = models.IntegerField()
+    malay = models.IntegerField()
+    sl_chetty = models.IntegerField()
+    bharatha = models.IntegerField()
+    other_eth = models.IntegerField()
     year = models.IntegerField(default=2012)
 
     class Meta:
