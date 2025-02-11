@@ -2,6 +2,7 @@ from rest_framework import serializers
 from mylocalstats.population_stats.models import Region, TotalPopulation
 from mylocalstats.population_stats.models import AgeDistribution
 from mylocalstats.population_stats.models import EthnicityDistribution
+from mylocalstats.population_stats.models import GenderDistribution
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,4 +57,19 @@ class EthnicityDistributionSerializer(serializers.ModelSerializer):
             'bharatha',
             'other_eth',
             'year'
+        ]
+
+class GenderDistributionSerializer(serializers.ModelSerializer):
+    region_id = serializers.CharField(source='region.entity_id')
+    region_name = serializers.CharField(source='region.name')
+    
+    class Meta:
+        model = GenderDistribution
+        fields = [
+            'region_id',
+            'region_name',
+            'year',
+            'total_population',
+            'male',
+            'female'
         ] 

@@ -22,12 +22,25 @@ from mylocalstats.population_stats import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api/v1/regions/type/<str:region_type>/', views.get_regions_by_type, name='regions-by-type'),
-    path('api/v1/region/<str:region_id>/', views.get_region_by_id, name='region-by-id'),
-    path('api/v1/population/region/type/<str:region_type>/', views.get_population_by_region_type, name='population-by-region-type'),
-    path('api/v1/population/region/id/<str:region_id>/', views.get_population_by_region_id, name='population-by-region-id'),
-    path('api/v1/age-distribution/region/type/<str:region_type>/', views.get_age_distribution_by_region_type, name='age-distribution-by-region-type'),
-    path('api/v1/age-distribution/region/id/<str:region_id>/', views.get_age_distribution_by_region_id, name='age-distribution-by-region-id'),
-    path('api/v1/ethnicity-distribution/region/type/<str:region_type>/', views.get_ethnicity_distribution_by_region_type, name='ethnicity-distribution-by-region-type'),
-    path('api/v1/ethnicity-distribution/region/id/<str:region_id>/', views.get_ethnicity_distribution_by_region_id, name='ethnicity-distribution-by-region-id'),
+    path('', views.api_root, name='api-root'),
+    
+    # Region URLs
+    path('api/v1/regions/type/<str:region_type>/', views.get_regions_by_type, name='get_regions_by_type'),
+    path('api/v1/region/id/<str:region_id>/', views.get_region_by_id, name='get_region_by_id'),
+    
+    # Population URLs
+    path('api/v1/population/type/<str:region_type>/', views.get_population_by_region_type, name='get_population_by_region_type'),
+    path('api/v1/population/id/<str:region_id>/', views.get_population_by_region_id, name='get_population_by_region_id'),
+    
+    # Age Distribution URLs
+    path('api/v1/age-distribution/type/<str:region_type>/', views.get_age_distribution_by_region_type, name='get_age_distribution_by_region_type'),
+    path('api/v1/age-distribution/id/<str:region_id>/', views.get_age_distribution_by_region_id, name='get_age_distribution_by_region_id'),
+    
+    # Ethnicity Distribution URLs
+    path('api/v1/ethnicity-distribution/type/<str:region_type>/', views.get_ethnicity_distribution_by_region_type, name='get_ethnicity_distribution_by_region_type'),
+    path('api/v1/ethnicity-distribution/id/<str:region_id>/', views.get_ethnicity_distribution_by_region_id, name='get_ethnicity_distribution_by_region_id'),
+    
+    # Gender Distribution URLs
+    path('api/v1/gender-distribution/type/<str:region_type>/', views.get_gender_distribution_by_region_type, name='get_gender_distribution_by_region_type'),
+    path('api/v1/gender-distribution/id/<str:region_id>/', views.get_gender_distribution_by_region_id, name='get_gender_distribution_by_region_id'),
 ]
