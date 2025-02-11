@@ -43,4 +43,8 @@ urlpatterns = [
     # Gender Distribution URLs
     path('api/v1/gender-distribution/type/<str:region_type>/', views.get_gender_distribution_by_region_type, name='get_gender_distribution_by_region_type'),
     path('api/v1/gender-distribution/id/<str:region_id>/', views.get_gender_distribution_by_region_id, name='get_gender_distribution_by_region_id'),
+
+    # Marital Status URLs
+    path('api/v1/marital-status/type/<str:region_type>/', views.get_marital_status_by_region_type, name='get_marital_status_by_region_type'),
+    path('api/v1/marital-status/id/<str:region_id>/', views.get_marital_status_by_region_id, name='get_marital_status_by_region_id'),
 ]

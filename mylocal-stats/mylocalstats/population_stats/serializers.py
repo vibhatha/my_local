@@ -3,6 +3,7 @@ from mylocalstats.population_stats.models import Region, TotalPopulation
 from mylocalstats.population_stats.models import AgeDistribution
 from mylocalstats.population_stats.models import EthnicityDistribution
 from mylocalstats.population_stats.models import GenderDistribution
+from mylocalstats.population_stats.models import MaritalStatus
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -72,4 +73,23 @@ class GenderDistributionSerializer(serializers.ModelSerializer):
             'total_population',
             'male',
             'female'
+        ]
+
+class MaritalStatusSerializer(serializers.ModelSerializer):
+    region_id = serializers.CharField(source='region.entity_id')
+    region_name = serializers.CharField(source='region.name')
+    
+    class Meta:
+        model = MaritalStatus
+        fields = [
+            'region_id',
+            'region_name',
+            'year',
+            'total_population',
+            'never_married',
+            'married_registered',
+            'married_customary',
+            'separated_legally',
+            'separated_non_legal',
+            'divorced', 'widowed', 'not_stated'
         ] 

@@ -78,11 +78,15 @@ class MaritalStatus(models.Model):
     region = models.OneToOneField(Region, on_delete=models.CASCADE, primary_key=True)
     total_population = models.IntegerField()
     never_married = models.IntegerField()
-    married = models.IntegerField()
-    separated = models.IntegerField()
+    married_registered = models.IntegerField()
+    married_customary = models.IntegerField()
+    separated_legally = models.IntegerField()
+    separated_non_legal = models.IntegerField()
     divorced = models.IntegerField()
     widowed = models.IntegerField()
+    not_stated = models.IntegerField()
     year = models.IntegerField(default=2012)
+
 
     class Meta:
         verbose_name_plural = "Marital Status Distributions"
