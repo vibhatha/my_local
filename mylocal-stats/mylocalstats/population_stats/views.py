@@ -2,14 +2,15 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from mylocalstats.population_stats.models import Region, TotalPopulation, AgeDistribution, EthnicityDistribution, GenderDistribution, MaritalStatus
+from mylocalstats.population_stats.models import Region, TotalPopulation, AgeDistribution, EthnicityDistribution, GenderDistribution, MaritalStatus, ReligiousAffiliation
 from mylocalstats.population_stats.serializers import (
     RegionSerializer, 
     TotalPopulationSerializer, 
     AgeDistributionSerializer, 
     EthnicityDistributionSerializer,
     GenderDistributionSerializer,
-    MaritalStatusSerializer
+    MaritalStatusSerializer,
+    ReligiousAffiliationSerializer
 )
 from rest_framework.reverse import reverse
 
@@ -218,6 +219,60 @@ def get_marital_status_by_region_id(request, region_id):
         )
 
 @api_view(['GET'])
+def get_religious_affiliation_by_region_type(request, region_type):
+    """Get religious affiliation data for all regions of a specific type.
+    
+    Args:
+        request: HTTP request object
+        region_type (str): Type of region (e.g., province, district)
+        
+    Returns:
+        Response: JSON response containing religious affiliation data
+    """
+    try:
+        regions = Region.objects.filter(type__iexact=region_type)
+        if not regions.exists():
+            return Response(
+                {"error": f"No regions found of type: {region_type}"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+        religious_affiliations = ReligiousAffiliation.objects.filter(region__in=regions)
+        serializer = ReligiousAffiliationSerializer(religious_affiliations, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response(
+            {"error": str(e)}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+@api_view(['GET'])
+def get_religious_affiliation_by_region_id(request, region_id):
+    """Get religious affiliation data for a specific region.
+    
+    Args:
+        request: HTTP request object
+        region_id (str): Entity ID of the region
+        
+    Returns:
+        Response: JSON response containing religious affiliation data
+    """
+    try:
+        region = Region.objects.get(entity_id=region_id)
+        religious_affiliation = ReligiousAffiliation.objects.get(region=region)
+        serializer = ReligiousAffiliationSerializer(religious_affiliation)
+        return Response(serializer.data)
+    except Region.DoesNotExist:
+        return Response(
+            {"error": "Region not found"}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    except ReligiousAffiliation.DoesNotExist:
+        return Response(
+            {"error": "Religious affiliation data not found for this region"}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+@api_view(['GET'])
 def api_root(request, format=None):
     return Response({
         'regions': {
@@ -243,6 +298,10 @@ def api_root(request, format=None):
         'marital_status': {
             'by_region_type': reverse('get_marital_status_by_region_type', args=['province'], request=request),
             'by_region_id': reverse('get_marital_status_by_region_id', args=['LK-1'], request=request),
+        },
+        'religious_affiliation': {
+            'by_region_type': reverse('get_religious_affiliation_by_region_type', args=['province'], request=request),
+            'by_region_id': reverse('get_religious_affiliation_by_region_id', args=['LK-1'], request=request),
         }
     })
 

@@ -4,6 +4,7 @@ from mylocalstats.population_stats.models import AgeDistribution
 from mylocalstats.population_stats.models import EthnicityDistribution
 from mylocalstats.population_stats.models import GenderDistribution
 from mylocalstats.population_stats.models import MaritalStatus
+from mylocalstats.population_stats.models import ReligiousAffiliation
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -92,4 +93,27 @@ class MaritalStatusSerializer(serializers.ModelSerializer):
             'separated_legally',
             'separated_non_legal',
             'divorced', 'widowed', 'not_stated'
+        ]
+
+class ReligiousAffiliationSerializer(serializers.ModelSerializer):
+    """Serializer for religious affiliation data.
+    
+    Converts ReligiousAffiliation model instances to/from JSON format.
+    """
+    region_id = serializers.CharField(source='region.entity_id')
+    region_name = serializers.CharField(source='region.name')
+    
+    class Meta:
+        model = ReligiousAffiliation
+        fields = [
+            'region_id',
+            'region_name',
+            'year',
+            'total_population',
+            'buddhist',
+            'hindu',
+            'islam',
+            'roman_catholic',
+            'other_christian',
+            'other'
         ] 

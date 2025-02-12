@@ -95,14 +95,12 @@ class ReligiousAffiliation(models.Model):
     """Population by religious affiliation"""
     region = models.OneToOneField(Region, on_delete=models.CASCADE, primary_key=True)
     total_population = models.IntegerField()
-    christian = models.IntegerField()
     buddhist = models.IntegerField()
     hindu = models.IntegerField()
-    muslim = models.IntegerField()
-    jewish = models.IntegerField()
-    other_religion = models.IntegerField()
-    no_religion = models.IntegerField()
-    not_stated = models.IntegerField()
+    islam = models.IntegerField()
+    roman_catholic = models.IntegerField()
+    other_christian = models.IntegerField()
+    other = models.IntegerField()
     year = models.IntegerField(default=2012)
 
     class Meta:
