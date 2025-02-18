@@ -48,6 +48,14 @@ git add external/gig-data
 git commit -m "Update gig-data submodule"
 ```
 
+### Environment Variables
+
+```bash
+export DATABASE_URL='your_database_url'
+export CORS_ALLOWED_ORIGINS=<url1>,<url2>
+export CORS_ALLOW_CREDENTIALS=True
+```
+
 ## Install Library for Development
 
 To install development dependencies for code formatting and linting, run:
