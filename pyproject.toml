@@ -19,6 +19,11 @@ dependencies = [
     "langchain-neo4j>=0.3.0",
     "langchain-text-splitters>=0.3.5",
     "langchain-openai>=0.3.3",
+    "graphene-django>=3.0.0",
+    "django-filter>=23.0",
+    django-graphql-jwt>=3.0.0,
+    "graphene-django>=3.0.0",
+    "drf-yasg>=1.21.0",
 ]
 
 [project.optional-dependencies]

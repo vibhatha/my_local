@@ -42,6 +42,27 @@ INSTALLED_APPS = [
     "population_stats",
     "rest_framework",
     "corsheaders",
+    'graphene_django',
+    'drf_yasg',
+]
+
+## TODO: check the feasibility of this simple configuration
+# GRAPHENE = {
+#     'SCHEMA': 'mylocalstats.graphql.schema.schema'
+# }
+
+# GraphQL settings
+GRAPHENE = {
+    'SCHEMA': 'mylocalstats.population_stats.graphql.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
+}
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 MIDDLEWARE = [
