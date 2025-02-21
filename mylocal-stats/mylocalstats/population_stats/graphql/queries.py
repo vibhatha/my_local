@@ -175,4 +175,4 @@ class Query(graphene.ObjectType):
         return queryset
 
     def resolve_religious_affiliation(self, info, region_id):
-        return ReligiousAffiliation.objects.get(region__entity_id=region_id) 
+        return ReligiousAffiliation.objects.get(region__entity_id=region_id)

@@ -1,5 +1,5 @@
 from graphene_django import DjangoObjectType
-from ..models import (
+from mylocalstats.population_stats.models import (
     Region,
     TotalPopulation,
     AgeDistribution,
@@ -42,4 +42,4 @@ class MaritalStatusType(DjangoObjectType):
 class ReligiousAffiliationType(DjangoObjectType):
     class Meta:
         model = ReligiousAffiliation
-        fields = "__all__" 
+        fields = "__all__"
