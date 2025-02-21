@@ -1,0 +1,382 @@
+openapi: 3.0.3
+info:
+  title: MyLocalStats API
+  description: API for accessing Sri Lankan population statistics across different regional levels
+  version: 1.0.0
+  contact:
+    email: contact@mylocalstats.com
+  license:
+    name: BSD License
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Development server
+
+components:
+  schemas:
+    Region:
+      type: object
+      properties:
+        entity_id:
+          type: string
+          example: "LK-1"
+        name:
+          type: string
+          example: "Western Province"
+        type:
+          type: string
+          enum: [province, district, dsd, gnd, ed, lg, pd, moh, country]
+          example: "province"
+
+    TotalPopulation:
+      type: object
+      properties:
+        region:
+          $ref: '#/components/schemas/Region'
+        total_population:
+          type: integer
+          example: 5837294
+        year:
+          type: integer
+          example: 2012
+
+    GenderDistribution:
+      type: object
+      properties:
+        region:
+          $ref: '#/components/schemas/Region'
+        total_population:
+          type: integer
+        male:
+          type: integer
+        female:
+          type: integer
+        year:
+          type: integer
+          example: 2012
+
+    AgeDistribution:
+      type: object
+      properties:
+        region:
+          $ref: '#/components/schemas/Region'
+        total_population:
+          type: integer
+        less_than_10:
+          type: integer
+        age_10_to_19:
+          type: integer
+        age_20_to_29:
+          type: integer
+        age_30_to_39:
+          type: integer
+        age_40_to_49:
+          type: integer
+        age_50_to_59:
+          type: integer
+        age_60_to_69:
+          type: integer
+        age_70_to_79:
+          type: integer
+        age_80_to_89:
+          type: integer
+        age_90_and_above:
+          type: integer
+        year:
+          type: integer
+          example: 2012
+
+    EthnicityDistribution:
+      type: object
+      properties:
+        region:
+          $ref: '#/components/schemas/Region'
+        total_population:
+          type: integer
+        sinhalese:
+          type: integer
+        sl_tamil:
+          type: integer
+        ind_tamil:
+          type: integer
+        sl_moor:
+          type: integer
+        burgher:
+          type: integer
+        malay:
+          type: integer
+        sl_chetty:
+          type: integer
+        bharatha:
+          type: integer
+        other_eth:
+          type: integer
+        year:
+          type: integer
+          example: 2012
+
+    ReligiousAffiliation:
+      type: object
+      properties:
+        region:
+          $ref: '#/components/schemas/Region'
+        total_population:
+          type: integer
+        buddhist:
+          type: integer
+        hindu:
+          type: integer
+        islam:
+          type: integer
+        roman_catholic:
+          type: integer
+        other_christian:
+          type: integer
+        other:
+          type: integer
+        year:
+          type: integer
+          example: 2012
+
+    MaritalStatus:
+      type: object
+      properties:
+        region:
+          $ref: '#/components/schemas/Region'
+        total_population:
+          type: integer
+        never_married:
+          type: integer
+        married_registered:
+          type: integer
+        married_customary:
+          type: integer
+        separated_legally:
+          type: integer
+        separated_non_legal:
+          type: integer
+        divorced:
+          type: integer
+        widowed:
+          type: integer
+        not_stated:
+          type: integer
+        year:
+          type: integer
+          example: 2012
+
+  parameters:
+    RegionType:
+      name: region_type
+      in: path
+      required: true
+      schema:
+        type: string
+        enum: [province, district, dsd, gnd, ed, lg, pd, moh, country]
+      description: Type of region to filter by
+
+    RegionId:
+      name: region_id
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "LK-1"
+      description: Unique identifier for a region
+
+paths:
+  /regions/type/{region_type}:
+    get:
+      summary: Get regions by type
+      parameters:
+        - $ref: '#/components/parameters/RegionType'
+      responses:
+        '200':
+          description: List of regions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Region'
+
+  /region/id/{region_id}:
+    get:
+      summary: Get region by ID
+      parameters:
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: Region details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Region'
+
+  /population/type/{region_type}:
+    get:
+      summary: Get population data by region type
+      parameters:
+        - $ref: '#/components/parameters/RegionType'
+      responses:
+        '200':
+          description: Population data for regions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TotalPopulation'
+
+  /population/id/{region_id}:
+    get:
+      summary: Get population data by region ID
+      parameters:
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: Population data for a region
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TotalPopulation'
+
+  /age-distribution/type/{region_type}:
+    get:
+      summary: Get age distribution by region type
+      parameters:
+        - $ref: '#/components/parameters/RegionType'
+      responses:
+        '200':
+          description: Age distribution data for regions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgeDistribution'
+
+  /age-distribution/id/{region_id}:
+    get:
+      summary: Get age distribution by region ID
+      parameters:
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: Age distribution data for a region
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgeDistribution'
+
+  /ethnicity-distribution/type/{region_type}:
+    get:
+      summary: Get ethnicity distribution by region type
+      parameters:
+        - $ref: '#/components/parameters/RegionType'
+      responses:
+        '200':
+          description: Ethnicity distribution data for regions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EthnicityDistribution'
+
+  /ethnicity-distribution/id/{region_id}:
+    get:
+      summary: Get ethnicity distribution by region ID
+      parameters:
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: Ethnicity distribution data for a region
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EthnicityDistribution'
+
+  /gender-distribution/type/{region_type}:
+    get:
+      summary: Get gender distribution by region type
+      parameters:
+        - $ref: '#/components/parameters/RegionType'
+      responses:
+        '200':
+          description: Gender distribution data for regions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GenderDistribution'
+
+  /gender-distribution/id/{region_id}:
+    get:
+      summary: Get gender distribution by region ID
+      parameters:
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: Gender distribution data for a region
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenderDistribution'
+
+  /religious-affiliation/type/{region_type}:
+    get:
+      summary: Get religious affiliation by region type
+      parameters:
+        - $ref: '#/components/parameters/RegionType'
+      responses:
+        '200':
+          description: Religious affiliation data for regions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReligiousAffiliation'
+
+  /religious-affiliation/id/{region_id}:
+    get:
+      summary: Get religious affiliation by region ID
+      parameters:
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: Religious affiliation data for a region
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReligiousAffiliation'
+
+  /marital-status/type/{region_type}:
+    get:
+      summary: Get marital status by region type
+      parameters:
+        - $ref: '#/components/parameters/RegionType'
+      responses:
+        '200':
+          description: Marital status data for regions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MaritalStatus'
+
+  /marital-status/id/{region_id}:
+    get:
+      summary: Get marital status by region ID
+      parameters:
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: Marital status data for a region
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaritalStatus'
