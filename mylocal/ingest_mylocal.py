@@ -28,17 +28,71 @@ def ingest_data():
         "pd": os.path.join(base_dir, "pd.tsv"),
     }
 
-    # Define processing steps
+    # Define the hierarchy of governing bodies
+    # Format: governing_type: {
+    #     'parents': [(parent_type, parent_id_column)],
+    #     'children': [child_type]
+    # }
+    hierarchy = {
+        "Country": {
+            "parents": [],
+            "children": ["Province"]
+        },
+        "Province": {
+            "parents": [("Country", "country_id")],
+            "children": ["ED", "District"]
+        },
+        "District": {
+            "parents": [("Province", "province_id")],
+            "children": ["PD", "LG", "MOH", "DSD"]
+        },
+        "PD": {
+            "parents": [("DSD", "dsd_id")], # not sure about this
+            "children": ["GND"]
+        },
+        "DSD": {
+            "parents": [
+                ("LG", "lg_id"),
+                ("MOH", "moh_id"),
+                ("District", "district_id")
+            ],
+            "children": ["PD"]
+        },
+        "ED": {
+            "parents": [("District", "district_id")],
+            "children": ["PD", "LG", "DSD"]
+        },
+        "GND": {
+            "parents": [("PD", "pd_id")],
+            "children": []
+        },
+        "LG": {
+            "parents": [
+                ("District", "district_id"),
+                ("ED", "ed_id")
+            ],
+            "children": ["GND"]
+        },
+        "MOH": {
+            "parents": [
+                ("District", "district_id"),
+                ("ED", "ed_id")
+            ],
+            "children": ["DSD"]
+        }
+    }
+
+    # Define processing order (important for creating parents before children)
     processing_steps = [
-        ("country", "Country", None, None),
-        ("province", "Province", "country_id", "Country"),
-        ("district", "District", "province_id", "Province"),
-        ("dsd", "DSD", "district_id", "District"),
-        ("ed", "ED", "province_id", "Province"),
-        ("gnd", "Locale", "dsd_id", "DSD"),
-        ("moh", "MOH", "district_id", "District"),
-        ("lg", "Local", "district_id", "District"),
-        ("pd", "PD", "ed_id", "ED"),
+        ("country", "Country"),
+        ("province", "Province"),
+        ("district", "District"),
+        ("ed", "ElectoralDivision"),
+        ("moh", "MedicalOfficerOfHealth"),
+        ("lg", "LocalGovernment"),
+        ("dsd", "DSD"),
+        ("pd", "PollingDivision"),
+        ("gnd", "GramaNiladhari"),
     ]
 
     # Process all files using context managers
@@ -47,8 +101,15 @@ def ingest_data():
             manager.register_connector("neo4j", driver)
 
             # Process all files
-            for file_key, node_label, parent_key, parent_label in processing_steps:
-                driver.process_file(file_paths[file_key], node_label, parent_key, parent_label)
+            for file_key, governing_type in processing_steps:
+                # Get all parent relationships for this type
+                parent_relationships = hierarchy[governing_type]["parents"]
+                for parent_type, parent_key in parent_relationships:
+                    driver.process_file(
+                        file_paths[file_key],
+                        governing_type,
+                        parent_key
+                    )
 
 
 if __name__ == "__main__":

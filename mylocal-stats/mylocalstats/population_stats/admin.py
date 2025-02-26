@@ -11,8 +11,10 @@ from .models import (
 
 @admin.register(Region)
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ('entity_id', 'name')
-    search_fields = ('entity_id', 'name')
+    list_display = ('region_id', 'name', 'region_type', 'code')
+    list_filter = ('region_type',)
+    search_fields = ('region_id', 'name', 'code')
+    readonly_fields = ('created_at', 'updated_at')
 
 @admin.register(TotalPopulation)
 class TotalPopulationAdmin(admin.ModelAdmin):

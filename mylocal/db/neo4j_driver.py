@@ -32,15 +32,30 @@ class Neo4jDriver:
         )
         tx.run(query, from_id=from_id, to_id=to_id)
 
-    def process_file(self, file_path, node_label, parent_key, parent_label):
+    def process_file(self, file_path, governing_type, parent_key):
+        """
+        Process a file to create GoverningBody nodes with specified type and relationships.
+        
+        Args:
+            file_path (str): Path to the TSV file
+            governing_type (str): Type of the governing body
+            parent_key (str): Column name that contains the parent node's ID
+        """
         df = pd.read_csv(file_path, sep="\t")
         with self._driver.session() as session:
             for _, row in df.iterrows():
                 properties = row.dropna().to_dict()
-                session.execute_write(self.insert_node, node_label, properties)
-                if parent_key in row and pd.notna(row[parent_key]):
+                properties['type'] = governing_type
+                
+                # Create or update the node
+                session.execute_write(self.insert_node, "GoverningBody", properties)
+                
+                # Create relationship if parent key exists and is not null
+                if parent_key and parent_key in row and pd.notna(row[parent_key]):
                     session.execute_write(
-                        self.insert_relationship, node_label, parent_label, "GOVERNED_BY", row["id"], row[parent_key]
+                        self.insert_relationship, 
+                        "GoverningBody", "GoverningBody", "GOVERNED_BY", 
+                        row["id"], row[parent_key]
                     )
 
     def execute_query(self, query, parameters=None):

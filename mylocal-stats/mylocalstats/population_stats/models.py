@@ -1,16 +1,75 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
+from django.utils import timezone
 
 class Region(models.Model):
-    """Base model for regions/entities"""
-    entity_id = models.CharField(max_length=20, primary_key=True)
+    """Base model for regions/entities with enhanced attributes"""
+    region_id = models.CharField(max_length=50, primary_key=True)
     name = models.CharField(max_length=255)
-    type = models.CharField(max_length=255, default="PD")
+    region_type = models.CharField(max_length=50)  # country, district, etc.
+    parent_region_id = models.CharField(max_length=50, null=True, blank=True)
+    code = models.CharField(max_length=50, null=True, blank=True)
+    hasc = models.CharField(max_length=50, null=True, blank=True)
+    fips = models.CharField(max_length=50, null=True, blank=True)
+    latitude = models.DecimalField(
+        max_digits=10,
+        decimal_places=6,
+        null=True,
+        blank=True
+    )
+    longitude = models.DecimalField(
+        max_digits=10,
+        decimal_places=6,
+        null=True,
+        blank=True
+    )
+    centroid_altitude = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text="Altitude of the region's centroid in meters"
+    )
+    population = models.IntegerField(null=True, blank=True)
+    area_sq_km = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+    subs = models.JSONField(null=True, blank=True)
+    supers = models.JSONField(null=True, blank=True)
+    eqs = models.JSONField(
+        null=True, 
+        blank=True,
+        help_text="List of equivalent region IDs"
+    )
+    ints = models.JSONField(
+        null=True, 
+        blank=True,
+        help_text="List of intersecting region IDs"
+    )
+    other_ids = models.JSONField(null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         app_label = 'population_stats'
+        db_table = 'regions'
+        indexes = [
+            models.Index(fields=['region_type']),
+            models.Index(fields=['code']),
+            models.Index(fields=['parent_region_id']),
+        ]
     
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.region_type})"
+    
+    def save(self, *args, **kwargs):
+        # Update the updated_at timestamp on save
+        if not self._state.adding:
+            self.updated_at = timezone.now()
+        super().save(*args, **kwargs)
 
 class TotalPopulation(models.Model):
     """Total population statistics"""
